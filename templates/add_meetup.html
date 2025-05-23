@@ -1,18 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Add Meetup</title>
+  <meta charset="UTF-8">
+  <title>Add Meetup | GradAtlas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 40px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 20px auto;
+      height: 50px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #444;
+    }
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    input[type="submit"] {
+      background-color: #0056b3;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+    input[type="submit"]:hover {
+      background-color: #003d80;
+    }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 13px;
+      color: #888;
+    }
+  </style>
 </head>
 <body>
-  <h1>Add a New Meetup</h1>
-  <form method="POST">
-    <label>Title:<br><input type="text" name="title" required></label><br><br>
-    <label>Host:<br><input type="text" name="host" required></label><br><br>
-    <label>Details:<br><textarea name="details" rows="4" cols="50"></textarea></label><br><br>
-    <label>Location:<br><input type="text" name="location" required></label><br><br>
-    <label>Attendees:<br><input type="number" name="attendees" min="1" value="1"></label><br><br>
-    <label>Tags (comma-separated):<br><input type="text" name="tags" required></label><br><br>
-    <input type="submit" value="Add Meetup">
-  </form>
+  <div class="container">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Grad_Cap_Icon.svg/1024px-Grad_Cap_Icon.svg.png" alt="GradAtlas Logo" class="logo">
+    <h1>Add a New Event</h1>
+    <form method="POST">
+      <label for="name">Event</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="host">Host</label>
+      <input type="text" id="host" name="host" required>
+
+      <label for="details">Details</label>
+      <textarea id="details" name="details" rows="4"></textarea>
+
+      <label for="location">Location</label>
+      <input type="text" id="location" name="location" required>
+
+      <label for="attendees">Attendees</label>
+      <input type="number" id="attendees" name="attendees" min="1" value="1">
+
+      <label for="tags">Tags (comma-separated)</label>
+      <input type="text" id="tags" name="tags" required>
+
+      <input type="submit" value="Add Meetup">
+    </form>
+  </div>
+  <footer>
+    &copy; 2025 GradAtlas. All rights reserved.
+  </footer>
 </body>
 </html>
