@@ -106,8 +106,7 @@ GradAtlas_FlaskApp/
 
 ## 🤝 Credits
 
-Created by Christine Chen and Yue Liu 
-Designed for academic and student communities interested in event sharing and search tools.
+Created by Christine Chen and Yue Liu. Designed for academic and student communities interested in event sharing and search tools.
 
 ---
 
