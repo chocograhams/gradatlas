@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Meetup</title>
+</head>
+<body>
+  <h1>Add a New Meetup</h1>
+  <form method="POST">
+    <label>Title:<br><input type="text" name="title" required></label><br><br>
+    <label>Host:<br><input type="text" name="host" required></label><br><br>
+    <label>Details:<br><textarea name="details" rows="4" cols="50"></textarea></label><br><br>
+    <label>Location:<br><input type="text" name="location" required></label><br><br>
+    <label>Attendees:<br><input type="number" name="attendees" min="1" value="1"></label><br><br>
+    <label>Tags (comma-separated):<br><input type="text" name="tags" required></label><br><br>
+    <input type="submit" value="Add Meetup">
+  </form>
+</body>
+</html>
