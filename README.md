@@ -2,15 +2,15 @@
 
 GradAtlas is a one-page web application built with Flask that allows graduate students and organizers to:
 
-- 🔍 Search for academic and social meetups by tag, location, name, or description
-- ✅ Select events of interest using checkboxes
-- 📥 Export selected events into a downloadable CSV file
+- Search for academic and social meetups by tag, location, name, or description
+- Select events of interest using checkboxes
+- Export selected events into a downloadable CSV file
 
 This is perfect for institutions or student communities that want a lightweight, local event discovery and export tool.
 
 ---
 
-## 🚀 Features
+## Features
 
 - Responsive one-page layout
 - GradAtlas branding with custom logo
@@ -21,7 +21,7 @@ This is perfect for institutions or student communities that want a lightweight,
 
 ---
 
-## 🧰 Requirements
+## Requirements
 
 - Python 3.x installed ([Download Python](https://www.python.org/downloads/))
 - pip (usually comes with Python)
@@ -29,7 +29,7 @@ This is perfect for institutions or student communities that want a lightweight,
 
 ---
 
-## 📦 Setup Instructions (Option 1: Local Installation)
+## Setup Instructions (Option 1: Local Installation)
 
 ### Step 1: Clone or Download the Project
 
@@ -84,7 +84,7 @@ http://127.0.0.1:5002/search
 1. Choose a filter (e.g., Tag, Location)
 2. Enter a keyword like "social" or "Seattle"
 3. See matching meetups
-4. ✅ Select the ones you want to export
+4. Select the ones you want to export
 5. Click **"Download Selected as CSV"** to save them to your computer
 
 ---
@@ -104,13 +104,13 @@ GradAtlas_FlaskApp/
 
 ---
 
-## 🤝 Credits
+## Credits
 
 Created by Christine Chen and Yue Liu. Designed for academic and student communities interested in event sharing and search tools.
 
 ---
 
-## 🛠 Optional Improvements
+## Optional Improvements
 
 - Add date or time filtering
 - Add login or admin panel
