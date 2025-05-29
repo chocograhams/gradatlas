@@ -1,15 +1,15 @@
 
-# ✅ GradAtlas Test Plan
+# GradAtlas Test Plan
 
 _A Living Document for Ensuring Quality & Performance_
 
-## 📌 Purpose
+## Purpose
 
 This test plan outlines how GradAtlas, a lightweight event discovery tool for Seattle-based graduate students, will be tested and maintained to ensure its usability, reliability, and performance. It is intended to guide ongoing development, issue detection, and continuous improvement.
 
 ---
 
-## 🧪 Test Categories
+## Test Categories
 
 ### 1. Functional Tests
 
@@ -35,7 +35,7 @@ This test plan outlines how GradAtlas, a lightweight event discovery tool for Se
 
 ---
 
-## 🚨 Alarms & Monitoring
+## Alarms & Monitoring
 
 | Trigger | Action |
 |--------|--------|
@@ -47,7 +47,7 @@ This test plan outlines how GradAtlas, a lightweight event discovery tool for Se
 
 ---
 
-## 🔁 Maintenance & Continuous Improvement
+## Maintenance & Continuous Improvement
 
 - **Weekly QA Audit:** Manually test all search filters and CSV export.
 - **Nightly Data Check:** Validate `meetups-list.json` for malformed entries.
@@ -56,7 +56,7 @@ This test plan outlines how GradAtlas, a lightweight event discovery tool for Se
 
 ---
 
-## 🧪 Sample Test Snippet
+## Sample Test Snippet
 
 ```bash
 # Functional API Test
@@ -75,7 +75,7 @@ curl http://127.0.0.1:5002/meetups
 
 ---
 
-## 📈 Quality Goals Summary
+## Quality Goals Summary
 
 | Attribute | Goal |
 |-----------|------|
@@ -87,14 +87,14 @@ curl http://127.0.0.1:5002/meetups
 
 ---
 
-## 🧑‍💻 Contributors
+## Contributors
 
 Christine Chen & Yue Liu  
 MSIM | University of Washington
 
 ---
 
-## 📎 Related Files
+## Related Files
 
 - `meetup_api3.py` — Flask API logic  
 - `meetups-list.json` — Event data store  
