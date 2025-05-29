@@ -16,7 +16,7 @@ This is perfect for institutions or student communities that want a lightweight,
 - Search filters by tag, location, name, or event description
 - Real-time display of matching results
 - Checkbox selection for exporting meetups to CSV
-- User-friendly form interface to for admin to add new events
+- User-friendly form interface for admin to add new events
 
 ---
 
