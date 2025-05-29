@@ -13,11 +13,10 @@ This is perfect for institutions or student communities that want a lightweight,
 ## Features
 
 - Responsive one-page layout
-- GradAtlas branding with custom logo
 - Search filters by tag, location, name, or event description
 - Real-time display of matching results
 - Checkbox selection for exporting meetups to CSV
-- Welcome message and logo integrated in header
+- User-friendly form interface to for admin to add new events
 
 ---
 
@@ -118,8 +117,8 @@ Created by Christine Chen and Yue Liu. Designed for academic and student communi
 
 ---
 
-## ❓ Need Help?
+## Need Help?
 
 If you have trouble running this, feel free to reach out or raise an issue.
 
-Enjoy GradAtlas! 🎓
+Enjoy GradAtlas!
