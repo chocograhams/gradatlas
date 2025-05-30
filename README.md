@@ -1,12 +1,12 @@
-# 🎓 GradAtlas Flask App
+
+# GradAtlas Flask App
 
 GradAtlas is a one-page web application built with Flask that allows graduate students and organizers to:
 
 - Search for academic and social meetups by tag, location, name, or description
 - Select events of interest using checkboxes
-- Export selected events into a downloadable CSV file
-
-This is perfect for institutions or student communities that want a lightweight, local event discovery and export tool.
+- Export selected events into a downloadable CSV or JSON file
+- Manage events using a browser-based admin panel with PostgreSQL
 
 ---
 
@@ -15,110 +15,102 @@ This is perfect for institutions or student communities that want a lightweight,
 - Responsive one-page layout
 - Search filters by tag, location, name, or event description
 - Real-time display of matching results
-- Checkbox selection for exporting meetups to CSV
-- User-friendly form interface for admin to add new events
+- Export selected meetups to CSV or JSON
+- Admin panel for adding/editing events (protected login)
+- PostgreSQL-compatible for deployment
 
 ---
 
 ## Requirements
 
-- Python 3.x installed ([Download Python](https://www.python.org/downloads/))
-- pip (usually comes with Python)
+- Python 3.x ([Download Python](https://www.python.org/downloads/))
+- pip (comes with Python)
 - Web browser (Chrome, Firefox, Safari, etc.)
 
 ---
 
-## Setup Instructions (Option 1: Local Installation)
+## Option 1: Local Installation
 
 ### Step 1: Clone or Download the Project
 
-Unzip the provided `GradAtlas_FlaskApp.zip` into a local directory.
-
-Alternatively, if using Git:
-
 ```bash
-git clone https://your-github-url/GradAtlas_FlaskApp.git
-cd GradAtlas_FlaskApp
+git clone https://github.com/your-username/gradatlas.git
+cd gradatlas
 ```
 
-### Step 2: Set Up a Python Environment (Optional but Recommended)
+### Step 2: Create and Activate Virtual Environment
 
 ```bash
 python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-### Step 3: Install Flask and Dependencies
+### Step 3: Install Dependencies
 
 ```bash
-pip install flask flask-cors
+pip install -r requirements.txt
 ```
 
-### Step 4: Run the Flask Server
+### Step 4: Set Up Environment Variable (Optional for PostgreSQL)
+
+```bash
+export DATABASE_URL=sqlite:///meetups.db
+```
+
+### Step 5: Run the App
 
 ```bash
 python meetup_api3.py
 ```
 
-If successful, your terminal will say:
-
-```
-Running on http://127.0.0.1:5002/
-```
+Then visit [http://127.0.0.1:5002/search](http://127.0.0.1:5002/search)
 
 ---
 
-## 🌐 Usage Instructions
+## Option 2: Deploy to Render
 
-### Visit the Search Page
+1. Push your code to GitHub (including `meetup_api3.py`, `templates/`, `static/`, and `requirements.txt`)
+2. Go to [https://render.com](https://render.com) and click "New Web Service"
+3. Link your GitHub repo and set:
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn meetup_api3:app`
+4. Under **Advanced Settings**:
+   - Add environment variable `DATABASE_URL` pointing to your PostgreSQL database
+5. Click **Deploy**
 
-Open your browser and go to:
-
-```
-http://127.0.0.1:5002/search
-```
-
-### On the Web Page You Can:
-
-1. Choose a filter (e.g., Tag, Location)
-2. Enter a keyword like "social" or "Seattle"
-3. See matching meetups
-4. Select the ones you want to export
-5. Click **"Download Selected as CSV"** to save them to your computer
+After deployment, visit `/search` to use the app, or `/admin` after logging in via `/login`.
 
 ---
 
-## 📁 Project Structure
+## Login Info for Admin
+
+Go to `/login` and enter:
+
+- Username: `admin`
+- Password: `password123`
+
+---
+
+## Project Structure
 
 ```
-GradAtlas_FlaskApp/
-├── meetup_api3.py                      # Flask app with all routes
-├── meetups-list.json                  # Sample event data
-├── README.md                          # This guide
+gradatlas/
+├── meetup_api3.py
+├── requirements.txt
 ├── templates/
 │   └── search_meetups_with_export_logo_welcome.html
 ├── static/
-│   └── Gradatlas_logo3.png            # Logo used in header
+│   └── Gradatlas_logo3.png
 ```
 
 ---
 
 ## Credits
 
-Created by Christine Chen and Yue Liu. Designed for academic and student communities interested in event sharing and search tools.
-
----
-
-## Optional Improvements
-
-- Add date or time filtering
-- Add login or admin panel
-- Deploy on Render or Replit for public access
+Created by Christine Chen and Yue Liu. Designed for student communities to manage and discover events easily.
 
 ---
 
 ## Need Help?
 
-If you have trouble running this, feel free to reach out or raise an issue.
-
-Enjoy GradAtlas!
+Reach out or open an issue. Enjoy using GradAtlas!
