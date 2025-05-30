@@ -172,5 +172,40 @@ def add_meetup():
         return redirect('/meetups')
     return render_template("add_meetup.html")
 
+@app.route('/meetups/export-selected', methods=['POST'])
+def export_selected():
+    selected = request.json.get("selected", [])
+    export_format = request.args.get("format", "csv")
+
+    if not selected:
+        return jsonify({"error": "No data provided"}), 400
+
+    if export_format == "json":
+        return jsonify(selected)
+
+    elif export_format == "csv":
+        output = io.StringIO()
+        writer = csv.DictWriter(output, fieldnames=['name', 'host', 'details', 'location', 'attendees', 'tags'])
+        writer.writeheader()
+        for item in selected:
+            writer.writerow({
+                "name": item.get("name", ""),
+                "host": item.get("host", ""),
+                "details": item.get("details", ""),
+                "location": item.get("location", ""),
+                "attendees": item.get("attendees", 0),
+                "tags": "; ".join(item.get("tags", [])) if isinstance(item.get("tags"), list) else item.get("tags", "")
+            })
+
+        return send_file(
+            io.BytesIO(output.getvalue().encode('utf-8')),
+            mimetype='text/csv',
+            as_attachment=True,
+            download_name='selected_meetups.csv'
+        )
+    else:
+        return jsonify({"error": "Invalid format. Use 'csv' or 'json'."}), 400
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5002, debug=True)
