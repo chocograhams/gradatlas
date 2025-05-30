@@ -117,86 +117,102 @@
     </form>
 
     <div class="download-section">
-      <button onclick="exportSelected()">Download Selected as CSV</button>
+       <button onclick="exportSelected('csv')">Download Selected as CSV</button>
+      <button onclick="exportSelected('json')">Download Selected as JSON</button>
     </div>
 
     <div class="results" id="results"></div>
   </div>
 
   <script>
-    const form = document.getElementById('searchForm');
-    const resultsDiv = document.getElementById('results');
+  const form = document.getElementById('searchForm');
+  const resultsDiv = document.getElementById('results');
+  let currentResults = [];
 
-    let currentResults = [];
-
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
-      const field = document.getElementById('field').value;
-      const query = document.getElementById('query').value;
-      fetch(`/meetups/search?field=${encodeURIComponent(field)}&q=${encodeURIComponent(query)}`)
-        .then(response => response.json())
-        .then(data => {
-          currentResults = data;
-          renderResults(data);
-        })
-        .catch(error => {
-          resultsDiv.innerHTML = `<p>Error fetching data: ${error}</p>`;
-        });
-    });
-
-    function renderResults(data) {
-      resultsDiv.innerHTML = '';
-      if (data.error) {
-        resultsDiv.innerHTML = `<p>${data.error}</p>`;
-        return;
-      }
-      data.forEach((meetup, index) => {
-        const div = document.createElement('div');
-        div.classList.add('meetup');
-        div.innerHTML = `
-          <input type="checkbox" id="checkbox-${index}" data-index="${index}">
-          <div class="meetup-details">
-            <h2>${meetup.name}</h2>
-            <p><strong>Host:</strong> ${meetup.host}</p>
-            <p><strong>Location:</strong> ${meetup.location}</p>
-            <p><strong>Details:</strong> ${meetup.details}</p>
-            <p><strong>Attendees:</strong> ${meetup.attendees}</p>
-            <p><strong>Tags:</strong> ${meetup.tags.join(', ')}</p>
-          </div>
-        `;
-        resultsDiv.appendChild(div);
-      });
-    }
-
-    function exportSelected() {
-      const selectedIndexes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
-                                   .map(cb => parseInt(cb.getAttribute('data-index')));
-      const selectedMeetups = selectedIndexes.map(i => currentResults[i]);
-
-      fetch('/meetups/export-selected', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ selected: selectedMeetups })
-      })
-      .then(response => {
-        if (!response.ok) throw new Error("Failed to generate CSV");
-        return response.blob();
-      })
-      .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'selected_meetups.csv';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const field = document.getElementById('field').value;
+    const query = document.getElementById('query').value;
+    fetch(`/meetups/search?field=${encodeURIComponent(field)}&q=${encodeURIComponent(query)}`)
+      .then(response => response.json())
+      .then(data => {
+        currentResults = data;
+        renderResults(data);
       })
       .catch(error => {
-        alert("Export failed: " + error.message);
+        resultsDiv.innerHTML = `<p>Error fetching data: ${error}</p>`;
       });
+  });
+
+  function renderResults(data) {
+    resultsDiv.innerHTML = '';
+    if (data.error) {
+      resultsDiv.innerHTML = `<p>${data.error}</p>`;
+      return;
     }
-  </script>
+    data.forEach((meetup, index) => {
+      const div = document.createElement('div');
+      div.classList.add('meetup');
+      div.innerHTML = `
+        <input type="checkbox" id="checkbox-${index}" data-index="${index}">
+        <div class="meetup-details">
+          <h2>${meetup.name}</h2>
+          <p><strong>Host:</strong> ${meetup.host}</p>
+          <p><strong>Location:</strong> ${meetup.location}</p>
+          <p><strong>Details:</strong> ${meetup.details}</p>
+          <p><strong>Attendees:</strong> ${meetup.attendees}</p>
+          <p><strong>Tags:</strong> ${meetup.tags.join(', ')}</p>
+        </div>
+      `;
+      resultsDiv.appendChild(div);
+    });
+  }
+
+  function exportSelected(format) {
+    const selectedIndexes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                                 .map(cb => parseInt(cb.getAttribute('data-index')));
+    const selectedMeetups = selectedIndexes.map(i => currentResults[i]);
+
+    if (selectedMeetups.length === 0) {
+      alert("Please select at least one event.");
+      return;
+    }
+
+    fetch(`/meetups/export-selected?format=${format}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ selected: selectedMeetups })
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Export failed");
+
+      if (format === 'json') {
+        return response.json().then(data => {
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'selected_meetups.json';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        });
+      } else {
+        return response.blob().then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'selected_meetups.csv';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        });
+      }
+    })
+    .catch(error => {
+      alert("Export error: " + error.message);
+    });
+  }
+</script>
 </body>
 </html>
