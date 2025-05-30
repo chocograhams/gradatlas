@@ -5,18 +5,34 @@ import io
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "supersecret")
 
-# Connect to PostgreSQL using environment variable
+# Database setup
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize extensions
+# Flask extensions
 db = SQLAlchemy(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
 admin = Admin(app, name='GradAtlas Admin', template_mode='bootstrap4')
 
-# Define your database model
+# Simple admin user for demonstration
+class AdminUser(UserMixin):
+    id = "admin"
+    password = "gradpass"  # Change in production
+
+@login_manager.user_loader
+def load_user(user_id):
+    if user_id == "admin":
+        return AdminUser()
+    return None
+
+# Models
 class Meetup(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -24,12 +40,17 @@ class Meetup(db.Model):
     details = db.Column(db.Text)
     location = db.Column(db.String(100))
     attendees = db.Column(db.Integer)
-    tags = db.Column(db.Text)  # Comma-separated string for tags
+    tags = db.Column(db.Text)
 
-# Register model with Flask-Admin
-admin.add_view(ModelView(Meetup, db.session))
+class SecureModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated
 
-# Create tables when app starts
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect("/login")
+
+admin.add_view(SecureModelView(Meetup, db.session))
+
 @app.before_first_request
 def create_tables():
     db.create_all()
@@ -37,6 +58,21 @@ def create_tables():
 @app.route('/')
 def home():
     return "Meetup API is running. Try /meetups, /meetups/tag/<tag>, or /admin"
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        if request.form['username'] == 'admin' and request.form['password'] == 'gradpass':
+            user = AdminUser()
+            login_user(user)
+            return redirect('/admin')
+        return "Invalid credentials", 401
+    return render_template("login.html")
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect('/')
 
 @app.route('/meetups', methods=['GET'])
 def get_all_meetups():
@@ -133,6 +169,22 @@ def search_meetups_api():
 @app.route('/search')
 def show_search_page():
     return render_template("search_meetups_with_export_logo_welcome.html")
+
+@app.route('/add', methods=['GET', 'POST'])
+def add_meetup():
+    if request.method == 'POST':
+        new_meetup = Meetup(
+            name=request.form['name'],
+            host=request.form['host'],
+            details=request.form['details'],
+            location=request.form['location'],
+            attendees=int(request.form['attendees']),
+            tags=','.join(tag.strip() for tag in request.form['tags'].split(','))
+        )
+        db.session.add(new_meetup)
+        db.session.commit()
+        return redirect('/meetups')
+    return render_template("add_meetup.html")
 
 @app.route('/meetups/export')
 def export_meetups_to_csv():
