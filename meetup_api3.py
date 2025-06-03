@@ -25,7 +25,7 @@ class AdminUser(UserMixin):
         self.id = id
 
 # Dummy credentials
-dummy_users = {"admin": {"password": "password123"}}
+dummy_users = {"admin": {"password": "password12345"}}
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -63,7 +63,7 @@ class SecureAdminIndexView(AdminIndexView):
         return redirect('/login')
 
 admin = Admin(app, name='GradAtlas Admin', template_mode='bootstrap3', index_view=SecureAdminIndexView())
-admin.add_view(SecureModelView(Meetup, db.session))
+admin.add_view(SecureModelView(Meetup, db.session, name='Events'))
 
 # --- Routes ---
 @app.route('/')
